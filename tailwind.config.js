@@ -1,11 +1,20 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{html,ts,svelte}'],
   theme: {
     extend: {
+      fontFamily: {
+        urbanist: ['Urbanist', ...defaultTheme.fontFamily.sans],
+        poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
+      },
       colors: {
-        primary: {"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","300":"#93c5fd","400":"#60a5fa","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8","800":"#1e40af","900":"#1e3a8a","950":"#172554"}
-      }
+        primary: "#4B5992",
+        accent: '#539DF3',
+        'icon-color': '#484C52',
+        'text-color': '#35383D',
+      },
     },
   },
   plugins: [],
