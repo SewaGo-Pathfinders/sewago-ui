@@ -1,4 +1,17 @@
-<script lang="ts">
+<script lang="ts">  
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation'
+  import { ref, getDownloadURL } from 'firebase/storage';
+
+  import Card from '$lib/components/Card.svelte';
+  import { productImg } from '$lib/firebase';
+
+  const img = ref(productImg, 'kompor.jpeg');
+  let imgUrl: string;
+
+  getDownloadURL(img)
+    .then((url) => imgUrl = url);
+
   const categories = [
     { title: 'Household', asset: 'household' },
     { title: 'Sport', asset: 'sport' },
@@ -9,6 +22,13 @@
     { title: 'Games & Entertaiment', asset: 'games-entertaiment' },
     { title: 'Contruction', asset: 'contruction' },
   ];
+
+  function setCategory(category: string, currentSearchParams: string | null) {
+    if (category === currentSearchParams)
+      goto('/');
+    else
+      goto(`?category=${category}`);
+  }
 </script>
 
 <svelte:head>
@@ -44,23 +64,41 @@
   </div>
 </header>
 
-<main class="mt-6">
+<main class="mt-6 flex flex-col gap-8">
   <section>
-    <div class="w-full h-[30lvh] outline outline-1 outline-zinc-300 rounded-3xl grid place-items-center text-zinc-300">
-      Ini rencananya carousel
-    </div>
-  </section>
-
-  <section class="mt-9">
-    <ul class="grid grid-cols-4 grid-rows-2 gap-3">
+    <ul class="grid grid-cols-4 grid-rows-2 gap-x-6 gap-y-1">
       {#each categories as { title, asset }}
-        <li class="flex flex-col items-center gap-2">
-          <button class="bg-zinc-100 outline outline-1 outline-zinc-200 rounded-2xl p-3">
+        {@const currentSearchParams = $page.url.searchParams.get('category')}
+      
+        <li class="grid grid-rows-2 place-items-center">
+          <button
+            class={`outline outline-1  rounded-2xl p-3 ${currentSearchParams === asset ? 'outline-accent bg-accent/10' : 'outline-zinc-200 bg-zinc-100'}`}
+            on:click={() => setCategory(asset, currentSearchParams)}
+          >
             <img src={`/category_icon/${asset}.svg`} alt="" class="h-8">
           </button>
-
           <span class="text-xs text-center">{title}</span>
         </li>
+      {/each}
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="font-semibold text-xl">Nearest Store</h2>
+
+    <ul class="grid grid-cols-2 auto-rows-auto gap-5 mt-6">
+      {#each new Array(6) as i}
+        <Card data={{
+          id: 'test',
+          img: imgUrl,
+          price: 28400,
+          rating: 4.7,
+          title: 'Kompor Gas Portable 1 Tungku Camping Portabel',
+          store: {
+            img: null,
+            title: 'Lorem ipsum dolor sit.'
+          },
+        }}/>
       {/each}
     </ul>
   </section>

@@ -35,6 +35,6 @@
 	"type": "module",
 	"dependencies": {
 		"firebase": "^10.7.1",
-		"sweetalert2": "^11.10.3"
+		"sweetalert2": "^11.6.13"
 	}
 }
